@@ -5,18 +5,24 @@
 <h2>Iniciar sesión</h2>
 
 <form method="post" asp-action="Login">
-    <label>Correo electrónico</label><br />
-    <input type="email" name="email" required /><br />
-
-    <label>Contraseña</label><br />
-    <input type="password" name="password" required /><br />
-
+    <div>
+        <label>Correo electrónico</label>
+        <input type="email" name="email" required />
+    </div>
+    <div>
+        <label>Contraseña</label>
+        <input type="password" name="password" required />
+    </div>
     <button type="submit">Entrar</button>
 </form>
 
-@if(ViewBag.Error != null)
+@if (!ViewData.ModelState.IsValid)
 {
-    <p style="color:red;">@ViewBag.Error</p>
+    <ul>
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <li>@error.ErrorMessage</li>
+        }
+    </ul>
 }
-
-<p>¿No tienes cuenta? <a asp-action="Registro">Regístrate</a></p>
+<p>¿No tienes cuenta? <a href="/Auth/Register">Regístrate aquí</a></p>

@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using TodoWeb.Models;
 using TodoWeb.Datos;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+
 
 namespace TodoWeb.Controllers
 {
@@ -85,6 +89,13 @@ namespace TodoWeb.Controllers
                 ViewBag.Error = "Usuario o contraseña incorrectos.";
                 return View();
             }
+        }
+        // Cerrar sesión
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Aquí podrías eliminar la sesión o cookie del usuario
+            return RedirectToAction("Index", "Home"); // O la página principal de tu app
         }
     }
 }
