@@ -25,14 +25,17 @@
                         <dd class="col-sm-8">
                             @switch (Model.Prioridad)
                             {
-                                case 1:
-                                    <span class="badge bg-primary">Baja</span>
+                                case Prioridad.Baja:
+                                    <span class="badge bg-success">Baja</span>
                                     break;
-                                case 2:
-                                    <span class="badge bg-danger">Media</span>
+                                case Prioridad.Media:
+                                    <span class="badge bg-warning text-dark">Media</span>
                                     break;
-                                case 3:
-                                    <span class="badge bg-warning text-dark">Alta</span>
+                                case Prioridad.Alta:
+                                    <span class="badge bg-danger">Alta</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-secondary">No definida</span>
                                     break;
                             }
                         </dd>
