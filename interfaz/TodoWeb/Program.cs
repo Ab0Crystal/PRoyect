@@ -1,31 +1,32 @@
 using Microsoft.EntityFrameworkCore;
-using TodoWeb.Datos;
-using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication;
+using TodoWeb.Datos;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración de la base de datos
 builder.Services.AddDbContext<TodoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+// Agregar servicios de MVC
 builder.Services.AddControllersWithViews();
 
+// Configuración de autenticación con cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Cuenta/Login"; // URL donde redirige si no está autenticado
+        options.LoginPath = "/Cuenta/Login";
         options.LogoutPath = "/Cuenta/Logout";
         options.ExpireTimeSpan = TimeSpan.FromHours(1);
-    },
+    });
 
-var ,app = builder.Build());
+var app = builder.Build();
 
-
+// Middleware y configuración del pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -33,16 +34,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthorization();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Ruta por defecto
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Tareas}/{action=Index}/{id?}");
-    app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Cuenta}/{action=Login}/{id?}");
 
 app.Run();
