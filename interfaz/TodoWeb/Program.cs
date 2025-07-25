@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración de servicios
+builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
+
 // Configuración de la base de datos
 builder.Services.AddDbContext<TodoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
