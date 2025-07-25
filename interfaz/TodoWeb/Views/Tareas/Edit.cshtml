@@ -33,19 +33,9 @@
                             <span asp-validation-for="FechaCreacion" class="text-danger"></span>
                             <label asp-for="Prioridad" class="form-label"></label>
                             <div class="form-group">
-<div class="form-group">
-    <select asp-for="Prioridad" asp-items="ViewBag.Prioridades" class="form-control">
-        <option value="">Seleccione una prioridad</option>
-        @foreach (var prioridad in ViewBag.Prioridades)
-        {
-            <option value="@prioridad.Value">@prioridad.Text</option>
-        }
-    </select>
-                            </div>
-                            <span asp-validation-for="Prioridad" class="text-danger"></span>
-<div class="mb-3">
-    <label asp-for="Prioridad" class="form-label"></label>
-        <label asp-for="Prioridad" class="control-label"></label>
+                                <select asp-for="Prioridad" asp-items="ViewBag.Prioridades" class="form-control"></select>
+                                <span asp-validation-for="Prioridad" class="text-danger"></span>
+    <label asp-for="Prioridad" class="control-label"></label>
     <select asp-for="Prioridad" asp-items="ViewBag.Prioridades" class="form-control"></select>
     <span asp-validation-for="Prioridad" class="text-danger"></span>
 </div>

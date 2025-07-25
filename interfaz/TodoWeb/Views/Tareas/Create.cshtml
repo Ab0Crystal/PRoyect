@@ -35,12 +35,12 @@
     <label asp-for="Prioridad" class="control-label"></label>
     <select asp-for="Prioridad" asp-items="ViewBag.Prioridades" class="form-control"></select>
     <span asp-validation-for="Prioridad" class="text-danger"></span>
+                                <option value="Baja">Baja</option>
+                                <option value="Media">Media</option>
+                                <option value="Alta">Alta</option>
+                            </select>
+                            <span asp-validation-for="Prioridad" class="text-danger"></span>
 </div>
-                                <option value="">Seleccione una prioridad</option>
-                                @foreach (var prioridad in ViewBag.Prioridades)
-                                {
-                                    <option value="@prioridad.Value">@prioridad.Text</option>
-                                }
                             <label asp-for="FechaVencimiento" class="form-label"></label>
                             <input asp-for="FechaVencimiento" class="form-control" type="date" />
                             </select>
