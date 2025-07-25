@@ -1,0 +1,56 @@
+@model Tarea
+
+@{
+    ViewData["Title"] = "Crear Nueva Tarea";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow rounded-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i> Crear Tarea</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div class="mb-3">
+                            <label asp-for="Titulo" class="form-label"></label>
+                            <input asp-for="Titulo" class="form-control" placeholder="Escribe un título..." />
+                            <span asp-validation-for="Titulo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Descripcion" class="form-label"></label>
+                            <textarea asp-for="Descripcion" class="form-control" rows="3" placeholder="Describe la tarea..."></textarea>
+                            <span asp-validation-for="Descripcion" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Fecha" class="form-label"></label>
+                            <input asp-for="Fecha" type="date" class="form-control" />
+                            <span asp-validation-for="Fecha" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Completado" class="form-label"></label>
+                            <select asp-for="Completado" class="form-select">
+                                <option value="false">No</option>
+                                <option value="true">Sí</option>
+                            </select>
+                            <span asp-validation-for="Completado" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Guardar Tarea
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

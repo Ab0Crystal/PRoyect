@@ -1,0 +1,50 @@
+@model IEnumerable<TodoWeb.Models.Tarea>
+
+@{
+    ViewData["Title"] = "Mis Tareas";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary"><i class="bi bi-card-checklist me-2"></i>Mis Tareas</h2>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Nueva Tarea
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> Aún no has agregado ninguna tarea.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card shadow-sm h-100 border-0">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">
+                                <i class="bi bi-check2-circle me-1"></i> @item.Titulo
+                            </h5>
+                            <p class="card-text text-muted">@item.Descripcion</p>
+                        </div>
+                        <div class="card-footer bg-transparent d-flex justify-content-between">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-eye"></i> Detalles
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
