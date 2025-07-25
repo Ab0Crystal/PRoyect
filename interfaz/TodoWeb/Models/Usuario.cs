@@ -1,11 +1,19 @@
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 namespace TodoWeb.Models
 {
     public class Usuario
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
 
-        public List<Tarea> Tareas { get; set; }
+        [Required]
+        public string NombreUsuario { get; set; } = null!;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = null!;
+
+        [Required]
+        public string PasswordHash { get; set; } = null!;
     }
 }

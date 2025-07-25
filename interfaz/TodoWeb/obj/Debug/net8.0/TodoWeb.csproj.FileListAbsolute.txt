@@ -258,6 +258,7 @@ C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\TodoWeb.csproj.CoreComp
 C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\TodoWeb.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\TodoWeb.RazorAssemblyInfo.cache
 C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\TodoWeb.RazorAssemblyInfo.cs
+C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\TodoWeb.sourcelink.json
 C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\matte\PRoyect\interfaz\TodoWeb\obj\Debug\net8.0\staticwebassets\msbuild.TodoWeb.Microsoft.AspNetCore.StaticWebAssets.props
