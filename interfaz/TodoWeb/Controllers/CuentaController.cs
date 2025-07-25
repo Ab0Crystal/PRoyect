@@ -92,10 +92,20 @@ namespace TodoWeb.Controllers
         }
         // Cerrar sesión
         [HttpPost]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            // Aquí podrías eliminar la sesión o cookie del usuario
-            return RedirectToAction("Index", "Home"); // O la página principal de tu app
+            // Aquí puedes limpiar la sesión o cookie del usuario}
+            // Por ejemplo, si estás usando cookies de autenticación:
+            if (User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            }
+            return RedirectToAction("Login");
+}
+        // Verificar si el usuario está autenticado
+        public bool EstaAutenticado()
+        {
+            return User.Identity.IsAuthenticated;
         }
     }
 }
