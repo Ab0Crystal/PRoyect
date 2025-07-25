@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TodoWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b311d57d032556472a70eb609b96b8a67a629a6f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42f6042384bf23dfbfd68e14fbe692cb2c79242b")]
 [assembly: System.Reflection.AssemblyProductAttribute("TodoWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TodoWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

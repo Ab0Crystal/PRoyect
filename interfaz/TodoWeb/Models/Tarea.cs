@@ -6,6 +6,7 @@ namespace TodoWeb.Models
     {
         public int Id { get; set; }
 
+[Required   (ErrorMessage = "El título es obligatorio.")]
         public string Titulo { get; set; } 
         public string Descripcion { get; set; }
 
