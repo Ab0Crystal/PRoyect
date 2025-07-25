@@ -26,9 +26,27 @@
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Fecha" class="form-label"></label>
-                            <input asp-for="Fecha" type="date" class="form-control" />
-                            <span asp-validation-for="Fecha" class="text-danger"></span>
+                            <label asp-for="FechaCreacion" class="form-label"></label>
+                            <input asp-for="FechaCreacion" class="form-control" type="date" readonly />
+                            <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+                            <label asp-for="Prioridad" class="form-label"></label>
+                            <select asp-for="Prioridad" class="form-select">
+                                <div class="form-group">
+    <label asp-for="Prioridad" class="control-label"></label>
+    <select asp-for="Prioridad" asp-items="ViewBag.Prioridades" class="form-control"></select>
+    <span asp-validation-for="Prioridad" class="text-danger"></span>
+</div>
+                                <option value="">Seleccione una prioridad</option>
+                                @foreach (var prioridad in ViewBag.Prioridades)
+                                {
+                                    <option value="@prioridad.Value">@prioridad.Text</option>
+                                }
+                            <label asp-for="FechaVencimiento" class="form-label"></label>
+                            <input asp-for="FechaVencimiento" class="form-control" type="date" />
+                            </select>
+                            <span asp-validation-for="Prioridad" class="text-danger"></span>
+                            <input asp-for="FechaVencimiento" class="form-control" type="date" />
+                            <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">

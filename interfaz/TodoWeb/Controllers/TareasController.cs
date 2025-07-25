@@ -46,11 +46,19 @@ namespace TodoWeb.Controllers
         }
 
         // GET: Tareas/Create
-        public IActionResult Create()
-        {
-            ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id");
-            return View();
-        }
+       public IActionResult Create()
+{
+    ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id");
+    
+    ViewBag.Prioridades = new SelectList(new[]
+    {
+        new { Value = 1, Text = "Nueva Tarea" },
+        new { Value = 2, Text = "Tarea Atrasada" },
+        new { Value = 3, Text = "Tarea Urgente" }
+    }, "Value", "Text");
+
+    return View();
+}
 
 
         [HttpPost]
@@ -81,6 +89,13 @@ namespace TodoWeb.Controllers
                 return NotFound();
             }
             ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
+            ViewBag.Prioridades = new SelectList(new[]
+{
+    new { Value = 1, Text = "Nueva Tarea" },
+    new { Value = 2, Text = "Tarea Atrasada" },
+    new { Value = 3, Text = "Tarea Urgente" }
+}, "Value", "Text", tarea.Prioridad); // esto marca la opción actual como seleccionada
+
             return View(tarea);
         }
 
