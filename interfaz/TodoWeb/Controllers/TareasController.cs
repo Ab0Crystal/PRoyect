@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using TodoWeb.Datos;
 using TodoWeb.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace TodoWeb.Controllers
 
@@ -24,10 +25,19 @@ namespace TodoWeb.Controllers
 
         // GET: Tareas
         public async Task<IActionResult> Index()
-        {
-            var todoContext = _context.Tareas.Include(t => t.Usuario);
-            return View(await todoContext.ToListAsync());
-        }
+{
+    if (!User.Identity.IsAuthenticated)
+        return RedirectToAction("Login", "Cuenta");
+
+    var usuarioId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+    var tareasUsuario = await _context.Tareas
+        .Include(t => t.Usuario)
+        .Where(t => t.UsuarioId == usuarioId)
+        .ToListAsync();
+
+    return View(tareasUsuario);
+}
 
 
         // GET: Tareas/Details/5

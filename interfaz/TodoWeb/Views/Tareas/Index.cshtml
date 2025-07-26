@@ -2,6 +2,10 @@
 
 <h1>Mis Tareas</h1>
 
+<p>
+    <a href="@Url.Action("Create", "Tareas")" class="btn btn-primary">Crear Nueva Tarea</a>
+</p>
+
 @if (!Model.Any())
 {
     <p>No hay tareas disponibles.</p>
