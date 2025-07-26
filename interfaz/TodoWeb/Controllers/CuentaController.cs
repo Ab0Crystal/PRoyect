@@ -88,12 +88,16 @@ namespace TodoWeb.Controllers
                 {
                     new Claim(ClaimTypes.Name, usuario.NombreUsuario),
                     new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString())
+
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties
+                {
+                    IsPersistent = false,
+                });
 
                 return RedirectToAction("Index", "Tareas");
             }

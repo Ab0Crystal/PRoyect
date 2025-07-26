@@ -27,16 +27,16 @@ namespace TodoWeb.Controllers
 public async Task<IActionResult> Index()
 {
     var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    if (userIdClaim == null) return RedirectToAction("Login", "Cuenta");
+    if (userIdClaim == null) return Unauthorized();
+
     int userId = int.Parse(userIdClaim);
-
     var tareas = await _context.Tareas
-        .Include(t => t.Usuario)
-        .Where(t => t.UsuarioId == userId)
-        .ToListAsync();
-
+                          .Include(t => t.Usuario)
+                          .Where(t => t.UsuarioId == userId)
+                          .ToListAsync();
     return View(tareas);
 }
+
 
 
 
@@ -82,19 +82,22 @@ public async Task<IActionResult> Index()
         // POST: Tareas/Create
         [HttpPost]
 [ValidateAntiForgeryToken]
-[HttpPost]
 public async Task<IActionResult> Create(Tarea tarea)
 {
     if (ModelState.IsValid)
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdClaim == null)
+        {
+            return Unauthorized();
+        }
+        tarea.UsuarioId = int.Parse(userIdClaim);
         _context.Tareas.Add(tarea);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
-    // recarga ViewBag.Prioridades si necesitas
     return View(tarea);
 }
-
 
 
 

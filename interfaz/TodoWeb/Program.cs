@@ -28,7 +28,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Cuenta/AccesoDenegado";
         options.LogoutPath = "/Cuenta/Logout";
         options.ExpireTimeSpan = TimeSpan.FromHours(1);
-    });
+    options.SlidingExpiration = true;
+    options.Cookie.MaxAge = options.ExpireTimeSpan;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
 
 var app = builder.Build();
 
