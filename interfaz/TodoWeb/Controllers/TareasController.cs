@@ -24,20 +24,20 @@ namespace TodoWeb.Controllers
         }
 
         // GET: Tareas
-        public async Task<IActionResult> Index()
+public async Task<IActionResult> Index()
 {
-    if (!User.Identity.IsAuthenticated)
-        return RedirectToAction("Login", "Cuenta");
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    if (userIdClaim == null) return RedirectToAction("Login", "Cuenta");
+    int userId = int.Parse(userIdClaim);
 
-    var usuarioId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-
-    var tareasUsuario = await _context.Tareas
+    var tareas = await _context.Tareas
         .Include(t => t.Usuario)
-        .Where(t => t.UsuarioId == usuarioId)
+        .Where(t => t.UsuarioId == userId)
         .ToListAsync();
 
-    return View(tareasUsuario);
+    return View(tareas);
 }
+
 
 
         // GET: Tareas/Details/5
@@ -66,9 +66,9 @@ namespace TodoWeb.Controllers
 
             ViewBag.Prioridades = new SelectList(new[]
             {
-        new { Value = 1, Text = "Nueva Tarea" },
-        new { Value = 2, Text = "Tarea Atrasada" },
-        new { Value = 3, Text = "Tarea Urgente" }
+        new { Value = 1, Text = "Baja" },
+        new { Value = 2, Text = "Media" },
+        new { Value = 3, Text = "Alta" }
     }, "Value", "Text");
 
             // ✅ Asignar la fecha de creación por defecto
@@ -81,19 +81,21 @@ namespace TodoWeb.Controllers
         }
         // POST: Tareas/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Titulo,Descripcion,FechaCreacion,Prioridad,FechaVencimiento,Completado,UsuarioId")] Tarea tarea)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tarea);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+[ValidateAntiForgeryToken]
+[HttpPost]
+public async Task<IActionResult> Create(Tarea tarea)
+{
+    if (ModelState.IsValid)
+    {
+        _context.Tareas.Add(tarea);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+    // recarga ViewBag.Prioridades si necesitas
+    return View(tarea);
+}
 
-            ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
-            return View(tarea);
-        }
+
 
 
         // GET: Tareas/Edit/5
