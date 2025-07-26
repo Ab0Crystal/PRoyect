@@ -25,6 +25,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Cuenta/Login";
+        options.AccessDeniedPath = "/Cuenta/AccesoDenegado";
         options.LogoutPath = "/Cuenta/Logout";
         options.ExpireTimeSpan = TimeSpan.FromHours(1);
     });
@@ -46,6 +47,7 @@ app.UseAuthorization();
 // Ruta por defecto
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Tareas}/{action=Index}/{id?}");
+    pattern: "{controller=Cuenta}/{action=Login}/{id?}");
+
 
 app.Run();

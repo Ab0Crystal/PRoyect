@@ -25,18 +25,20 @@
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="FechaCreacion" class="form-label"></label>
-                            <input asp-for="FechaCreacion" class="form-control bg-light text-dark" type="date" readonly />
-                            <span asp-validation-for="FechaCreacion" class="text-danger"></span>
-                        </div>
+    <label asp-for="FechaCreacion" class="form-label"></label>
+    <input asp-for="FechaCreacion" class="form-control text-muted" type="date"
+           value="@Model.FechaCreacion.ToString("yyyy-MM-dd")" readonly />
+    <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+</div>
 
-                        <div class="mb-3">
-                            <label asp-for="Prioridad" class="form-label"></label>
-                            <select asp-for="Prioridad" class="form-select" asp-items="Html.GetEnumSelectList<Prioridad>()">
-                                <option value="">Seleccione una prioridad</option>
-                            </select>
-                            <span asp-validation-for="Prioridad" class="text-danger"></span>
-                        </div>
+<div class="mb-3">
+    <label asp-for="Prioridad" class="form-label"></label>
+    <select asp-for="Prioridad" asp-items="ViewBag.Prioridades" class="form-select">
+        <option value="">Seleccione una prioridad</option>
+    </select>
+    <span asp-validation-for="Prioridad" class="text-danger"></span>
+</div>
+
 
                         <div class="mb-3">
                             <label asp-for="FechaVencimiento" class="form-label"></label>

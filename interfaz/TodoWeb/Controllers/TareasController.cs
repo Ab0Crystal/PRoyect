@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TodoWeb.Datos;
 using TodoWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TodoWeb.Controllers
+
 {
+    [Authorize]
     public class TareasController : Controller
     {
         private readonly TodoContext _context;
@@ -25,6 +28,7 @@ namespace TodoWeb.Controllers
             var todoContext = _context.Tareas.Include(t => t.Usuario);
             return View(await todoContext.ToListAsync());
         }
+
 
         // GET: Tareas/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -49,70 +53,84 @@ namespace TodoWeb.Controllers
         public IActionResult Create()
         {
             ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id");
-            return View();
+
+            ViewBag.Prioridades = new SelectList(new[]
+            {
+        new { Value = 1, Text = "Nueva Tarea" },
+        new { Value = 2, Text = "Tarea Atrasada" },
+        new { Value = 3, Text = "Tarea Urgente" }
+    }, "Value", "Text");
+
+            // ✅ Asignar la fecha de creación por defecto
+            var nuevaTarea = new Tarea
+            {
+                FechaCreacion = DateTime.Now
+            };
+
+            return View(nuevaTarea);
         }
         // POST: Tareas/Create
         [HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> Create([Bind("Titulo,Descripcion,FechaCreacion,Prioridad,FechaVencimiento,Completado,UsuarioId")] Tarea tarea)
-{
-    if (ModelState.IsValid)
-    {
-        _context.Add(tarea);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Titulo,Descripcion,FechaCreacion,Prioridad,FechaVencimiento,Completado,UsuarioId")] Tarea tarea)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(tarea);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
 
-    ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
-    return View(tarea);
-}
+            ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
+            return View(tarea);
+        }
 
 
         // GET: Tareas/Edit/5
         public async Task<IActionResult> Edit(int? id)
-{
-    if (id == null)
-        return NotFound();
+        {
+            if (id == null)
+                return NotFound();
 
-    var tarea = await _context.Tareas.FindAsync(id);
-    if (tarea == null)
-        return NotFound();
+            var tarea = await _context.Tareas.FindAsync(id);
+            if (tarea == null)
+                return NotFound();
 
-    ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
-    return View(tarea);
-}
+            ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
+            return View(tarea);
+        }
 
 
         // POST: Tareas/Edit/5
-        
+
         [HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,FechaCreacion,Prioridad,FechaVencimiento,Completado,UsuarioId")] Tarea tarea)
-{
-    if (id != tarea.Id)
-        return NotFound();
-
-    if (ModelState.IsValid)
-    {
-        try
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Titulo,Descripcion,FechaCreacion,Prioridad,FechaVencimiento,Completado,UsuarioId")] Tarea tarea)
         {
-            _context.Update(tarea);
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!TareaExists(tarea.Id))
+            if (id != tarea.Id)
                 return NotFound();
-            else
-                throw;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tarea);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TareaExists(tarea.Id))
+                        return NotFound();
+                    else
+                        throw;
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
+            return View(tarea);
         }
-
-        return RedirectToAction(nameof(Index));
-    }
-
-    ViewData["UsuarioId"] = new SelectList(_context.Set<Usuario>(), "Id", "Id", tarea.UsuarioId);
-    return View(tarea);
-}
 
 
         // GET: Tareas/Delete/5

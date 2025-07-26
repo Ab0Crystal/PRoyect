@@ -5,7 +5,8 @@ using TodoWeb.Datos;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
-
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace TodoWeb.Controllers
 {
@@ -20,14 +21,14 @@ namespace TodoWeb.Controllers
             _passwordHasher = new PasswordHasher<Usuario>();
         }
 
-        // Mostrar formulario registro
+        // GET: /Cuenta/Registro
         [HttpGet]
         public IActionResult Registro()
         {
             return View();
         }
 
-        // Procesar registro
+        // POST: /Cuenta/Registro
         [HttpPost]
         public IActionResult Registro(string nombreUsuario, string email, string password, string confirmarPassword)
         {
@@ -37,7 +38,6 @@ namespace TodoWeb.Controllers
                 return View();
             }
 
-            // Validar si ya existe el email o usuario
             if (_context.Usuarios.Any(u => u.Email == email || u.NombreUsuario == nombreUsuario))
             {
                 ViewBag.Error = "El correo o usuario ya existe.";
@@ -58,16 +58,19 @@ namespace TodoWeb.Controllers
             return RedirectToAction("Login");
         }
 
-        // Mostrar formulario login
+        // GET: /Cuenta/Login
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Tareas");
+
             return View();
         }
 
-        // Procesar login
+        // POST: /Cuenta/Login
         [HttpPost]
-        public IActionResult Login(string email, string password)
+        public async Task<IActionResult> Login(string email, string password)
         {
             var usuario = _context.Usuarios.FirstOrDefault(u => u.Email == email);
 
@@ -81,31 +84,30 @@ namespace TodoWeb.Controllers
 
             if (resultado == PasswordVerificationResult.Success)
             {
-                // Aquí podrías crear sesión o cookie para mantener al usuario logueado (más adelante si quieres)
-                return RedirectToAction("Index", "Tareas"); // O la página principal de tu app
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, usuario.NombreUsuario),
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString())
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                return RedirectToAction("Index", "Tareas");
             }
-            else
-            {
-                ViewBag.Error = "Usuario o contraseña incorrectos.";
-                return View();
-            }
+
+            ViewBag.Error = "Usuario o contraseña incorrectos.";
+            return View();
         }
-        // Cerrar sesión
+
+        // POST: /Cuenta/Logout
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            // Aquí puedes limpiar la sesión o cookie del usuario}
-            // Por ejemplo, si estás usando cookies de autenticación:
-            if (User.Identity.IsAuthenticated)
-            {
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            }
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
-}
-        // Verificar si el usuario está autenticado
-        public bool EstaAutenticado()
-        {
-            return User.Identity.IsAuthenticated;
         }
     }
 }
