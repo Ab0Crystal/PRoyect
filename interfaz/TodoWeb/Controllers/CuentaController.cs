@@ -14,11 +14,13 @@ namespace TodoWeb.Controllers
     {
         private readonly TodoContext _context;
         private readonly PasswordHasher<Usuario> _passwordHasher;
+        private readonly ILoginService _loginService;
 
         public CuentaController(TodoContext context)
         {
             _context = context;
             _passwordHasher = new PasswordHasher<Usuario>();
+            _loginService = new LoginService(_context);
         }
 
         // GET: /Cuenta/Registro
@@ -37,7 +39,7 @@ namespace TodoWeb.Controllers
                 ViewBag.Error = "Las contraseñas no coinciden.";
                 return View();
             }
-
+            
             if (_context.Usuarios.Any(u => u.Email == email || u.NombreUsuario == nombreUsuario))
             {
                 ViewBag.Error = "El correo o usuario ya existe.";
@@ -70,7 +72,23 @@ namespace TodoWeb.Controllers
 
         // POST: /Cuenta/Login
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login([FromBod] LoginRequest loginRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Error = "Por favor, complete todos los campos.";
+                return View();
+            }
+
+            var response = await _loginService.LoginAsync(loginRequest);
+            var email = loginRequest.Email;
+            var password = loginRequest.Password;
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                ViewBag.Error = "El correo y la contraseña son obligatorios.";
+                return View();
+            }
         {
             var usuario = _context.Usuarios.FirstOrDefault(u => u.Email == email);
 
